@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+import rospy
+from geometry_msgs.msg import Twist
+t=Twist()
+def callback(data):
+    rospy.loginfo("Linear x : %s , Linear y : %s ,Linear z : %s ; /t Angular x : %s ,Angular y : %s , Angular z : %s",data.linear.x,data.linear.y,data.linear.z, data.angular.x,data.angular.y,data.angular.z)
+    t=data
+def listener():
+
+    twist=Twist()
+    twist=t
+    rospy.init_node('teleop_control', anonymous=True)
+    pub = rospy.Publisher('cmd_vel', Twist,queue_size=10)
+    rospy.Subscriber('cmd_vel_in', Twist,callback)
+    
+    #twist.linear.x +=5; twist.linear.y +=10; twist.linear.z =7
+    #twist.angular.x +=3; twist.angular.y +=9; twist.angular.z +=55
+    pub.publish(twist)
+    rospy.spin()
+
+if __name__ == '__main__':
+    listener()
